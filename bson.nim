@@ -13,8 +13,7 @@ static:
 getHeader(
   "src" / "libbson" / "src" / "bson" / "bson.h",
   giturl = "https://github.com/mongodb/mongo-c-driver",
-  outdir = baseDir / "build",
-  conFlags = ""
+  outdir = baseDir / "build"
 )
 
 cPlugin:
@@ -25,51 +24,21 @@ cPlugin:
 
 cOverride:
   type
-    uint64_t* {.importc,header:"<stdint.h>".} = uint64
-    uint32_t* {.importc,header:"<stdint.h>".} = uint32
-    uint16_t* {.importc,header:"<stdint.h>".} = uint16
-    uint8_t* {.importc,header:"<stdint.h>".} = uint8
-
-    int64_t* {.importc,header:"<stdint.h>".} = int64
-    int32_t* {.importc,header:"<stdint.h>".} = int32
-    int16_t* {.importc,header:"<stdint.h>".} = int16
-    int8_t* {.importc,header:"<stdint.h>".} = int8
-
-  type
-    bson_type_t* = enum
-      BSON_TYPE_EOD = 0x00000000, BSON_TYPE_DOUBLE = 0x00000001,
-      BSON_TYPE_UTF8 = 0x00000002, BSON_TYPE_DOCUMENT = 0x00000003,
-      BSON_TYPE_ARRAY = 0x00000004, BSON_TYPE_BINARY = 0x00000005,
-      BSON_TYPE_UNDEFINED = 0x00000006, BSON_TYPE_OID = 0x00000007,
-      BSON_TYPE_BOOL = 0x00000008, BSON_TYPE_DATE_TIME = 0x00000009,
-      BSON_TYPE_NULL = 0x0000000A, BSON_TYPE_REGEX = 0x0000000B,
-      BSON_TYPE_DBPOINTER = 0x0000000C, BSON_TYPE_CODE = 0x0000000D,
-      BSON_TYPE_SYMBOL = 0x0000000E, BSON_TYPE_CODEWSCOPE = 0x0000000F,
-      BSON_TYPE_INT32 = 0x00000010, BSON_TYPE_TIMESTAMP = 0x00000011,
-      BSON_TYPE_INT64 = 0x00000012, BSON_TYPE_DECIMAL128 = 0x00000013,
-      BSON_TYPE_MAXKEY = 0x0000007F, BSON_TYPE_MINKEY = 0x000000FF
-    bson_subtype_t* = enum
-      BSON_SUBTYPE_BINARY = 0x00000000, BSON_SUBTYPE_FUNCTION = 0x00000001,
-      BSON_SUBTYPE_BINARY_DEPRECATED = 0x00000002,
-      BSON_SUBTYPE_UUID_DEPRECATED = 0x00000003, BSON_SUBTYPE_UUID = 0x00000004,
-      BSON_SUBTYPE_MD5 = 0x00000005, BSON_SUBTYPE_USER = 0x00000080
-
-  type
     INNER_C_STRUCT_a_38* {.bycopy.} = object
-      timestamp*: uint32_t
-      increment*: uint32_t
+      timestamp*: uint32
+      increment*: uint32
 
     INNER_C_STRUCT_a_42* {.bycopy.} = object
       str*: cstring
-      len*: uint32_t
+      len*: uint32
 
     INNER_C_STRUCT_a_46* {.bycopy.} = object
-      data*: ptr uint8_t
-      data_len*: uint32_t
+      data*: ptr uint8
+      data_len*: uint32
 
     INNER_C_STRUCT_a_50* {.bycopy.} = object
-      data*: ptr uint8_t
-      data_len*: uint32_t
+      data*: ptr uint8
+      data_len*: uint32
       subtype*: bson_subtype_t
 
     INNER_C_STRUCT_a_55* {.bycopy.} = object
@@ -78,31 +47,31 @@ cOverride:
 
     INNER_C_STRUCT_a_59* {.bycopy.} = object
       collection*: cstring
-      collection_len*: uint32_t
+      collection_len*: uint32
       oid*: bson_oid_t
 
     INNER_C_STRUCT_a_64* {.bycopy.} = object
       code*: cstring
-      code_len*: uint32_t
+      code_len*: uint32
 
     INNER_C_STRUCT_a_68* {.bycopy.} = object
       code*: cstring
-      scope_data*: ptr uint8_t
-      code_len*: uint32_t
-      scope_len*: uint32_t
+      scope_data*: ptr uint8
+      code_len*: uint32
+      scope_len*: uint32
 
     INNER_C_STRUCT_a_74* {.bycopy.} = object
       symbol*: cstring
-      len*: uint32_t
+      len*: uint32
 
     INNER_C_UNION_a_30* {.bycopy.} = object {.union.}
       v_oid*: bson_oid_t
-      v_int64*: int64_t
-      v_int32*: int32_t
-      v_int8*: int8_t
+      v_int64*: int64
+      v_int32*: int32
+      v_int8*: int8
       v_double*: cdouble
       v_bool*: bool
-      v_datetime*: int64_t
+      v_datetime*: int64
       v_timestamp*: INNER_C_STRUCT_a_38
       v_utf8*: INNER_C_STRUCT_a_42
       v_doc*: INNER_C_STRUCT_a_46
@@ -116,11 +85,13 @@ cOverride:
 
     bson_value_t* {.bycopy.} = object
       value_type*: bson_type_t
-      padding*: int32_t
+      padding*: int32
       value*: INNER_C_UNION_a_30
 
+# cmake
+cIncludeDir(baseDir / "build" / "buildcache" / "src" / "libbson" / "src" / "bson")
 
 when not defined(bsonStatic):
-  cImport(bsonPath, recurse = true, dynlib = "bson")
+  cImport(bsonPath, recurse = true, dynlib = "bsonLPath")
 else:
   cImport(bsonPath, recurse = true)
